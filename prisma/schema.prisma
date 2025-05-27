@@ -1,0 +1,138 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  CREW_MEMBER
+}
+
+enum JobStatus {
+  ACTIVE
+  COMPLETED
+  ARCHIVED
+}
+
+enum ReceiptStatus {
+  PENDING
+  PROCESSING
+  PROCESSED
+  FAILED
+  APPROVED
+  REJECTED
+}
+
+enum ExpenseCategory {
+  MATERIALS
+  EQUIPMENT
+  LABOR
+  SUBCONTRACTOR
+  PERMITS
+  FUEL
+  TOOLS
+  UTILITIES
+  INSURANCE
+  OTHER
+}
+
+model Company {
+  id                String    @id @default(cuid())
+  name              String
+  email             String    @unique
+  phone             String?
+  address           String?
+  taxId             String?
+  quickbooksTokens  Json?
+  plaidTokens       Json?
+  emailForwarding   String?   @unique
+  settings          Json      @default("{}")
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  users             User[]
+  jobs              Job[]
+  receipts          Receipt[]
+}
+
+model User {
+  id                String    @id @default(cuid())
+  email             String    @unique
+  password          String
+  firstName         String
+  lastName          String
+  phone             String?
+  role              UserRole  @default(CREW_MEMBER)
+  isActive          Boolean   @default(true)
+  lastLogin         DateTime?
+  settings          Json      @default("{}")
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  companyId         String
+  company           Company   @relation(fields: [companyId], references: [id])
+  
+  receipts          Receipt[]
+}
+
+model Job {
+  id                String    @id @default(cuid())
+  name              String
+  description       String?
+  clientName        String?
+  clientEmail       String?
+  clientPhone       String?
+  address           String?
+  startDate         DateTime?
+  endDate           DateTime?
+  budget            Float?
+  status            JobStatus @default(ACTIVE)
+  quickbooksJobId   String?
+  metadata          Json      @default("{}")
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  companyId         String
+  company           Company   @relation(fields: [companyId], references: [id])
+  
+  receipts          Receipt[]
+}
+
+model Receipt {
+  id                String    @id @default(cuid())
+  imageUrl          String
+  thumbnailUrl      String?
+  amount            Float
+  tax               Float?
+  totalAmount       Float
+  vendorName        String?
+  receiptDate       DateTime
+  description       String?
+  ocrData           Json?
+  ocrConfidence     Float?
+  status            ReceiptStatus @default(PENDING)
+  processedAt       DateTime?
+  approvedAt        DateTime?
+  rejectionReason   String?
+  isEmailReceipt    Boolean   @default(false)
+  emailSource       String?
+  quickbooksId      String?
+  bankTransactionId String?
+  metadata          Json      @default("{}")
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  companyId         String
+  company           Company   @relation(fields: [companyId], references: [id])
+  
+  userId            String
+  user              User      @relation(fields: [userId], references: [id])
+  
+  jobId             String?
+  job               Job?      @relation(fields: [jobId], references: [id])
+}
