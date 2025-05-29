@@ -6,6 +6,8 @@ import { PrismaClient } from '@prisma/client';
 
 // Import routes
 import authRoutes from './routes/auth.routes';
+import jobRoutes from './routes/jobs.routes';
+import receiptRoutes from './routes/receipts.routes';
 
 // Load environment variables
 dotenv.config();
@@ -28,6 +30,8 @@ app.get('/health', (req, res) => {
 
 // API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/jobs', jobRoutes);
+app.use('/api/receipts', receiptRoutes);
 
 // Start server
 const PORT = process.env.PORT || 3000;

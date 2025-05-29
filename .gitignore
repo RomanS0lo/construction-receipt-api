@@ -14,3 +14,14 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 /src/generated/prisma
+"" 
+"# Development and AI assistance files" 
+".claude/" 
+"CLAUDE_CODE_BRIEF.md" 
+"test-aws.js" 
+"validation-scripts/" 
+"# Development and AI assistance files" 
+".claude/" 
+"CLAUDE_CODE_BRIEF.md" 
+"test-aws.js" 
+"validation-scripts/" 

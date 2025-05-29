@@ -90,6 +90,9 @@ model Job {
   address           String?
   startDate         DateTime?
   endDate           DateTime?
+  estimatedHours    Float?
+  actualHours       Float?
+  hourlyRate        Float?
   budget            Float?
   status            JobStatus @default(ACTIVE)
   quickbooksJobId   String?

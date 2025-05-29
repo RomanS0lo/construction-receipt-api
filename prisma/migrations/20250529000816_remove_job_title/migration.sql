@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Job" ADD COLUMN     "actualHours" DOUBLE PRECISION,
+ADD COLUMN     "estimatedHours" DOUBLE PRECISION,
+ADD COLUMN     "hourlyRate" DOUBLE PRECISION;
